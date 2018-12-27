@@ -1,26 +1,37 @@
-var HtmlWebpackPlugin = require("html-webpack-plugin");
+const webpack = require("webpack");
+const merge = require("webpack-merge");
 
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: "babel-loader"
-        }
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+
+module.exports = env => {
+  const { PLATFORM, VERSION } = env;
+  return merge([
+    {
+      module: {
+        rules: [
+          {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            use: {
+              loader: "babel-loader"
+            }
+          },
+          {
+            test: /\.css$/,
+            use: ["style-loader", "css-loader"]
+          }
+        ]
       },
-      {
-        test: /\.css$/,
-        include: /node_modules/,
-        loaders: ["style-loader", "css-loader"]
-      }
-    ]
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: "./src/index.html",
-      filename: "./index.html"
-    })
-  ]
+      plugins: [
+        new HtmlWebpackPlugin({
+          template: "./src/index.html",
+          filename: "./index.html"
+        }),
+        new webpack.DefinePlugin({
+          "process.env.VERSION": JSON.stringify(env.VERSION),
+          "process.env.PLATFORM": JSON.stringify(env.PLATFORM)
+        })
+      ]
+    }
+  ]);
 };

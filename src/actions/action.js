@@ -4,15 +4,15 @@ export const addPost = post => {
   return { type: "ADD_POST", post: post };
 };
 
-export const deletePost = post => {
-  return { type: "DELETE_POST", post: post };
+export const loadPosts = response => {
+  return { type: "LOAD_POSTS", payload: response.data };
 };
 
-// export const loadPosts = posts => {
-//   return { type: "LOAD_POSTS", posts: posts };
-// };
-
 export const fetchPosts = () => {
-  const response = axios.get("http://jsonplaceholder.typicode.com/posts");
-  return { type: "LOAD_POSTS", payload: response };
+  return dispatch => {
+    axios.get("http://jsonplaceholder.typicode.com/posts").then(response => {
+      dispatch(loadPosts(response));
+    });
+  };
+  // return { type: "LOAD_POSTS", payload: response };
 };

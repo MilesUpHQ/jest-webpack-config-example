@@ -14,6 +14,14 @@ class PublicForm extends Component {
     });
   };
 
+  handleSubmit = event => {
+    event.preventDefault();
+    this.props.addPost(this.state.inputText);
+    this.setState({
+      inputText: ""
+    });
+  };
+
   render() {
     return (
       <div>
@@ -22,10 +30,7 @@ class PublicForm extends Component {
           value={this.state.inputText}
           className="form-control"
         />
-        <button
-          onClick={() => this.props.addPost(this.state.inputText)}
-          className="btn btn-primary"
-        >
+        <button onClick={this.handleSubmit} className="btn btn-primary">
           Post
         </button>
       </div>
